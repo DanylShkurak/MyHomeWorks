@@ -6,7 +6,7 @@ import homework8.exception.WrongSumException;
 
 public  class Helper {
     public void checkClientAccId(String clientAccID) throws WrongFieldException {
-        if (!clientAccID.equals(String.valueOf(10))) {
+        if (clientAccID.length()!=10) {
             throw new WrongFieldException();
         }
     }
