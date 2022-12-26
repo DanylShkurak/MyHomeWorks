@@ -1,0 +1,99 @@
+CREATE TABLE client_status(
+    client_id int, CONSTRAINT fk_client FOREIGN KEY (client_id)REFERENCES clients(id),
+    status_id int, CONSTRAINT fk_status FOREIGN KEY (status_id)REFERENCES statuses(id)
+);
+Это связь к таблицам которые создал в прошлой домашке.
+
+CREATE TABLE workers(
+id serial PRIMARY KEY,
+name varchar(20),
+salary double precision,
+work_time double precision)
+
+CREATE TABLE workers_access(
+	workers_access_level int not null
+)
+
+INSERT INTO workers (name,salary,work_time) VALUES ('Bob',100,8);
+INSERT INTO workers (name,salary,work_time) VALUES ('Pot',100,8);
+INSERT INTO workers (name,salary,work_time) VALUES ('Mike',100,8);
+INSERT INTO workers (name,salary,work_time) VALUES ('Kole',100,8);
+INSERT INTO workers (name,salary,work_time) VALUES ('Wort',100,8);
+
+CREATE TRIGGER workers_insert
+AFTER INSERT ON workers
+FOR EACH ROW EXECUTE PROCEDURE change_workers_insert();
+
+CREATE TRIGGER workers_delete
+AFTER DELETE ON workers
+FOR EACH ROW EXECUTE PROCEDURE change_workers_delete();
+
+CREATE TRIGGER workers_update
+AFTER UPDATE ON workers
+FOR EACH ROW EXECUTE PROCEDURE change_workers_update();
+
+
+
+CREATE OR REPLACE FUNCTION change_workers_update() RETURNS TRIGGER AS $$
+DECLARE cur CURSOR FOR SELECT salary,work_time FROM workers;
+ work_lvl_id int;
+  BEGIN
+    IF (TG_OP = 'UPDATE') THEN
+	work_lvl_id = 2;
+  INSERT INTO workers_access
+  (workers_access_level)
+  VALUES
+  (work_lvl_id);
+   RETURN NEW;
+   END IF;
+  END;  $$ LANGUAGE plpgsql;
+
+
+	CREATE OR REPLACE FUNCTION change_workers_insert() RETURNS TRIGGER AS $$
+	DECLARE curs CURSOR FOR SELECT salary,work_time FROM workers;
+	storage_variable record;
+	counter int;
+
+  BEGIN
+	OPEN curs;
+	LOOP
+	IF (TG_OP  = 'INSERT') THEN
+   FETCH curs INTO storage_variable;
+   EXIT WHEN NOT FOUND;
+   SELECT COUNT(*) INTO counter FROM workers;
+	UPDATE workers SET
+	salary = (storage_variable.salary*(counter-1))/counter,
+    work_time = (storage_variable.work_time*(counter-1))/counter;
+	RETURN NEW;
+	END IF;
+	END LOOP;
+	close curs;
+	END;$$ LANGUAGE plpgsql;
+
+
+	CREATE OR REPLACE FUNCTION change_workers_delete() RETURNS TRIGGER AS $$
+	DECLARE curs CURSOR FOR SELECT salary,work_time FROM workers;
+	storage_variable record;
+	counter int;
+
+
+    BEGIN
+  	OPEN curs;
+  	LOOP
+    IF (TG_OP = 'DELETE') THEN
+     FETCH curs INTO storage_variable;
+     EXIT WHEN NOT FOUND;
+      SELECT COUNT(*) INTO counter FROM workers;
+  	UPDATE workers SET
+  	salary = storage_variable.salary + (storage_variable.salary/counter) ,
+      work_time = storage_variable.work_time + (storage_variable.work_time/counter);
+     RETURN OLD;
+     END IF;
+  	END LOOP;
+  	close curs;
+  	END;  $$ LANGUAGE plpgsql;
+
+
+
+
+
