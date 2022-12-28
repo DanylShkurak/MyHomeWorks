@@ -1,0 +1,11 @@
+UPDATE clients SET age = 12 WHERE id=1;
+UPDATE clients SET age = 40 WHERE id=2;
+UPDATE clients SET age = 32 WHERE id=3;
+UPDATE clients SET age = 9  WHERE id=4;
+UPDATE clients SET age = 21 WHERE id=6;
+UPDATE clients SET age = 10 WHERE id=7;
+UPDATE clients SET age = 31 WHERE id=8;
+UPDATE clients SET age = 54 WHERE id=9;
+UPDATE clients SET age = 67 WHERE id=10;
+
+файл можно так называть "add_column_age" или camelCase надо?
