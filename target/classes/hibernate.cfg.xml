@@ -16,9 +16,6 @@
         <property name="show_sql">true</property>
         <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
-        <mapping class="homework26.entity.Status"/>
-        <mapping class="homework26.entity.Client"/>
-        <mapping class="homework26.entity.Account"/>
 
 
     </session-factory>
