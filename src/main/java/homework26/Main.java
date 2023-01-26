@@ -19,13 +19,13 @@ public class Main {
 //        clientService.save(client);
 //        Client byId = clientService.getById(5);
 //        System.out.println(byId);
-        System.out.println(clientService.getByPhone(90722099));
+//        System.out.println(clientService.getByPhone(90722099));
 //        clientService.updateAgeById(5,59);
 //        clientService.deleteById(12);
-        StatusService statusService = new StatusService();
-        Status status = new Status();
+//        StatusService statusService = new StatusService();
+//        Status status = new Status();
 //        System.out.println(statusService.getAll());
-        System.out.println(statusService.getById(1));
+//        System.out.println(statusService.getById(1));
         AccountService accountService = new AccountService();
 
         System.out.println(accountService.getById(3));

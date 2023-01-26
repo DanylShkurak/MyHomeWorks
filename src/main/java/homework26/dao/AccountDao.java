@@ -3,6 +3,8 @@ package homework26.dao;
 
 import homework26.entity.Account;
 import homework26.util.HibernateConfiguration;
+
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -11,6 +13,8 @@ import java.util.List;
 
 
 public class AccountDao {
+    Logger logger = Logger.getLogger(AccountDao.class.getName());
+
     public void save(Account account) {
         SessionFactory sessionFactory = HibernateConfiguration.getSessionFactory();
         Session session = sessionFactory.openSession();
@@ -38,7 +42,7 @@ public class AccountDao {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         Account account = session.get(Account.class, id);
-
+        logger.debug(String.format("Phone number is {%s} for id {%d}",account.getNumber(),account.getId()));
         transaction.commit();
         session.close();
 

@@ -2,11 +2,13 @@ package homework26.service;
 
 import homework26.dao.AccountDao;
 import homework26.entity.Account;
+import org.apache.log4j.Logger;
 
 
 import java.util.List;
 
 public class AccountService {
+    Logger logger = Logger.getLogger(AccountService.class.getName());
     private final AccountDao accountDao = new AccountDao();
 
     public void save(Account account) {
@@ -15,6 +17,7 @@ public class AccountService {
 
     public Account getById(int id) {
         Account account = accountDao.getById(id);
+        logger.debug(String.format("Account value is {%s} for id {%d}",account.getValue(),account.getId()));
         return account;
     }
 
